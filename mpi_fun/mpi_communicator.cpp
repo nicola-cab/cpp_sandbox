@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include <mpi.h>
 
 const int TASKS = 2;
@@ -14,30 +15,26 @@ int main(int argc, char** argv){
 	MPI_Comm_size(MPI_COMM_WORLD, &n_tasks);
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-	if( n_tasks != TASKS ){
-		std::cout << " task available " << n_tasks << " != than task available " << TASKS << std::endl;
-		MPI_Finalize();
-		exit(0);
-	}
-
 	MPI_Comm_group(MPI_COMM_WORLD,&orig_group);
 
-	//split process in two groups
-	if( rank < TASKS/2 ){
-		int ranks[1] = {0};
-		MPI_Group_incl(orig_group, TASKS/2, ranks, &new_group);
+	//split processes in two groups
+	if( rank < n_tasks/2 ){
+
+	  	std::vector<int> ranks;
+		for( auto i=0;i<n_tasks/2;++i)
+			ranks.push_back(i);	
+
+		MPI_Group_incl(orig_group, n_tasks/2, &ranks[0], &new_group);
 	}
 	else {
-		int ranks[1]={1};
-		MPI_Group_incl(orig_group, TASKS/2, ranks, &new_group);
+		std::vector<int> ranks;
+		for( auto i=n_tasks/2; i<n_tasks ; ++i)
+			ranks.push_back(i);	
+
+		MPI_Group_incl(orig_group, n_tasks/2, &ranks[0], &new_group);
 	}
 
-	if( rank == 0 ) {
-		out = 10;
-	}
-	else if( rank == 1) {
-		out = 11;
-	}
+	out = rank*2;
 
 	MPI_Comm_create(MPI_COMM_WORLD, new_group, &new_comm);
 	MPI_Allreduce(&out, &final_out, 2, MPI_INT, MPI_SUM, new_comm);
