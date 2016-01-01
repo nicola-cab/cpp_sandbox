@@ -94,9 +94,9 @@ int main(int argc, char** argv)
     //std::thread t1(th_write);
     //std::thread t2(th_read);
     
-    //locks (only 42 20 are acceptable values)
-    //std::thread t1(th_write_lock);
-    //std::thread t2(th_read_lock);
+    //locks (only 0 0 42 20 are acceptable values)
+//    std::thread t1(th_write_lock);
+//    std::thread t2(th_read_lock);
 
     //atomics (seq consistency)
     //std::thread t1(atomic_write);

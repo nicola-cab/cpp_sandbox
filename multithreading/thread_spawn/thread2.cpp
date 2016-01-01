@@ -103,7 +103,7 @@ int main(int argc, char** argv)
 
 			case 2:
 			{
-				std::cout <<"Sleep " << x << " ns" << std::endl;
+				//std::cout <<"Sleep " << x << " ns" << std::endl;
 				spawn_task(Mode::COMPLEX_DETACH, x);
 			}
 			break;

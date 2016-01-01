@@ -89,8 +89,8 @@ int main(int argc, char* argv[])
     
     std::cout << "\n Coarse grained locking -- \n";
     //simple solution plain lock
-    //auto f = push<Q>;
-    //auto g = try_pop<Q, result_t>;
+   // auto f = push<Q>;
+   // auto g = try_pop<Q, result_t>;
     
     auto f = push_and_notify<Q>;
     auto g = wait_and_pop<Q, result_t>;
@@ -99,8 +99,8 @@ int main(int argc, char* argv[])
     if(benchmarks)
     {
         //simple solution plain lock
-        //f = push_benchmark<Q>;
-        //g = try_pop_benchmark<Q, result_t>;
+   //     f = push_benchmark<Q>;
+   //     g = try_pop_benchmark<Q, result_t>;
 
         f = push_and_notify_benchmark<Q>;
         g = wait_and_pop_benchmark<Q, result_t>;

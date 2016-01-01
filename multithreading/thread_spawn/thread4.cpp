@@ -58,9 +58,13 @@ void spawn_using_threads()
 	std::vector<std::thread> threads; 
 
 	threads.emplace_back(fnt,0,"Hi");
-	threads.emplace_back(lambda_f,1,"Salut");
-	threads.emplace_back(functionalObject{},2,"Ciao");
-	threads.emplace_back(&Object::f, Object{},3,"Hola");
+	threads.emplace_back(fnt,1,"Salut");
+	threads.emplace_back(fnt,2,"Ciao");
+	threads.emplace_back(fnt,3,"Hola");
+
+//	threads.emplace_back(lambda_f,1,"Salut");
+//	threads.emplace_back(functionalObject{},2,"Ciao");
+//	threads.emplace_back(&Object::f, Object{},3,"Hola");
 	//threads.emplace_back(consume_fancy_object,A{});
 
 	for(auto& t: threads )

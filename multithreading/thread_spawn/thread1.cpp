@@ -9,6 +9,6 @@ void hello()
 int main(int argc, char** argv)
 {
 	std::thread t(hello);
-	t.join(); //comment this to have sigabort... you must care about your threads (solution use a scoped thread)
+	t.join(); 
 	return 0;
 }
