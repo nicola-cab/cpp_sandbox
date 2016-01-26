@@ -7,9 +7,9 @@ template<typename F>
 class FunctorObj 
 {
 protected:
-	F _f
+	F _f;
 public:
-	Functor(F f) : _f(std::move(f))
+	FunctorObj(F f) : _f(std::move(f))
 	{}	
 
    virtual ~FunctorObj() = default;
@@ -23,11 +23,15 @@ public:
    }
 };
 
-class ImplFunctorObj : public FunctorObj{
+template<typename F>
+class ImplFunctorObj : public FunctorObj<F>{
    std::string _name;
    int _num;
 public:
-   ImplFunctorObj(std::string name, int num) : _name(std::move(name)), _num(num)
+
+   ImplFunctorObj(F f, std::string name, int num) : FunctorObj<F>(f),
+																	 _name(std::move(name)), 
+																	 _num(num)
    {}
    
    virtual void toArgs()
