@@ -27,7 +27,8 @@ int main(int argc, char** argv)
 {
 
 	auto f = [](int a, int b){return a+b;};
-	auto sum = run_f(f, std::make_tuple(10,20));
+	auto t = std::make_tuple(10,20);
+	auto sum = run_f(f,t);
 	std::cout << sum << std::endl;
    
    return 0;
