@@ -30,7 +30,7 @@ Notice: I ran the same set of algorithms on windows using visual studio 2013 and
 | inner_product | 6000 | 7000 | stl|
 | partial_sum | 19000 | 10000| tail |
 
-**Turning down the optimisation flag (by default O1)... here there results I got**
+**Turning down the optimisation flag (by default O0)... here there results I got**
 
 | algorithm      | time stl (ns) | time tail recursive (ns) | winner
 | ------------- |-------------| -----|
