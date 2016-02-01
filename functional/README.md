@@ -9,7 +9,7 @@ Since all stl algorithms accept ranges as input, I used a std::vector of ints wi
 Notice: I ran the same set of algorithms on windows using visual studio 2013 and I got different results but these result were comparable with what reported in this table. 
 
 | algorithm      | time stl (ns) | time tail recursive (ns) | winner
-| ------------- |-------------| -----|
+| ------------- |-------------| -----| --- 
  find           |    0         |    0  |   same 
  find_if        |    0         |    0  |   same 
  find_if_not    |    0         |    0  |   same 
@@ -33,7 +33,7 @@ Notice: I ran the same set of algorithms on windows using visual studio 2013 and
 **Turning down the optimisation flag (by default O0)... here there results I got**
 
  algorithm      | time stl (ns) | time tail recursive (ns) | winner
- ------------- |-------------| -----|
+ ------------- |-------------| -----| --- 
  find           |    1959000         |    0  |   tail 
  find_if        |    177000        |    1000  |   tail 
  find_if_not    |    5000         |    0  |   tail 
