@@ -16,7 +16,7 @@ delving into the details of the system calls brk/sbrk and mmap in order to under
 - ***mpi_fun*** 
 explicit parallelism using openMPI, framework that I used to develop my master thesis
 
-- ***multithreading *** 
+- ***multithreading*** 
 collection of c++11 std::thread snippets of code and the presentation I gave to the Cpp Meetup in Dublin
 
 - ***sample code*** 
