@@ -60,7 +60,7 @@ Conclusion
 -------------
 
 It looks like that without optimisation stl over-performs tail recursive implemented algorithms. With O3 enabled tail recursion optimisation does its job and it makes a recursive call run as fast as the iterative counterpart.
-Intersting notice that std::find was always beaten by the tail recursive counterpart.
+Intersting to notice that std::find was always beaten by the tail recursive counterpart.
 
 
 
