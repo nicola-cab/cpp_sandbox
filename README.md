@@ -13,7 +13,7 @@ Folders (this list might change ... )
 
 ***mpi_fun*** --> explicit parallelism using openMPI, framework that I used to develop my master thesis
 
-***multithreading *** --> collection of c++11 std::thread snippets of code and the presentation I gave to the Cpp Meetup in Dublin
+***multithreading*** --> collection of c++11 std::thread snippets of code and the presentation I gave to the Cpp Meetup in Dublin
 
 ***sample code*** --> every single piece of code that I tested or some C++ feature I wanted to try and understand goes here 
 
