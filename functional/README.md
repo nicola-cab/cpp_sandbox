@@ -2,11 +2,12 @@ Tail recursive algorithms vs stl ones
 ===================
 
 
-I compared a bunch of stl algorithms with a their counter part written using tail recursion, in order to understand how much can a compiler optimise a recursive function that uses tail recursion.
+I compared a bunch of stl algorithms with their counterparts written using tail recursion. I've done this in order to understand how much can a compiler optimise a recursive function that uses tail recursion.
 
-Since all stl algorithms accept ranges as input, I used a std::vector of ints with size N set 10000 (without optimisation flag I could not go beyond these size without getting segfault for the recursive algorithms). These are  the numbers I got compiling this code using clang and optimisation flag -O3
+Since all stl algorithms accept ranges as input, I used a std::vector of ints (randomly generated using C++11 random engine) of size N = 10000, without optimisation flags I could not go beyond these size and getting segfault due to many recursive calls. 
+These are  the numbers I got compiling this code using clang and optimisation flag set to -O3 (in these case I set N to 100000)
 
-Notice: I ran the same set of algorithms on windows using visual studio 2013 and I got different results but these result were comparable with what reported in this table. 
+Notice: I ran the same set of algorithms on windows using visual studio 2013 and I got different results but these result were comparable with what I reported in this table. 
 
 | algorithm      | time stl (ns) | time tail recursive (ns) | winner
 | ------------- |-------------| -----| --- 
@@ -30,7 +31,7 @@ Notice: I ran the same set of algorithms on windows using visual studio 2013 and
  inner_product | 6000 | 7000 | stl
  partial_sum | 19000 | 10000| tail 
 
-**Turning down the optimisation flag (by default O0)... here there results I got**
+**Turning down the optimisation flag (by default O0 on clang)... here there results I got**
 
  algorithm      | time stl (ns) | time tail recursive (ns) | winner
  ------------- |-------------| -----| --- 
@@ -58,7 +59,8 @@ Notice: I ran the same set of algorithms on windows using visual studio 2013 and
 Conclusion
 -------------
 
-It looks like without optimisation stl over-performs tail recursive implemented algorithms. With O3 enable there is tail recursion optimisation does its job and makes a recursive call run as fast as the iterative counterpart.
+It looks like that without optimisation stl over-performs tail recursive implemented algorithms. With O3 enabled tail recursion optimisation does its job and it makes a recursive call run as fast as the iterative counterpart.
+Intersting notice that std::find was always beaten by the tail recursive counterpart.
 
 
 
