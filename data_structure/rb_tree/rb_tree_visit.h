@@ -54,7 +54,7 @@ namespace rb_tree {
       if (node == nullptr)
          return;
 
-      visit_pvisit_post_orderre_order<T>(node->left_);
+      visit_post_order<T>(node->left_);
       visit_post_order<T>(node->right_);
       std::cout << node->val_ << std::endl;
    }
@@ -63,7 +63,7 @@ namespace rb_tree {
    /// level visit
    ///
    template <typename T>
-   inline void level_visit(Node<T>* root)
+   void level_visit(Node<T>* root)
    {
       using Node = Node<T>*;
 
@@ -75,7 +75,7 @@ namespace rb_tree {
 
       while (!q_.empty()) {
          auto tmp = q_.front();
-         std::cout << " - Value: " << tmp->val_ << endl;
+         std::cout << " - Value: " << tmp->val_ << std::endl;
          q_.pop();
 
          if (tmp->left_ != nullptr)

@@ -6,6 +6,7 @@
 #pragma once
 
 #include "rb_tree_node.h"
+#include "rb_tree_operation.h"
 #include <cassert>
 
 using rb_tree_node::Node;
@@ -13,12 +14,12 @@ using rb_tree_node::Color;
 
 namespace rb_tree {
 
-   //fix-up for rb tree. Fix up made by composition
-   // Accordingly with MIT's book "Introduction to alogorithms", 
-   // there are 6 possible case where it is needed fix the tree.
+   // fix-up for rb tree. Fix up made by composition
+   // Accordingly with MIT's book "Introduction to alogorithms" - CLRS,
+   // there are 6 possible case where it is needed to fix the tree.
 
    template<typename T>
-   inline void rb_tree_insert_fix_up(Node<T>*& root, Node<T>*& node)
+   void rb_tree_insert_fix_up(Node<T>*& root, Node<T>*& node)
    {
       using Node = Node < T >*;
 
@@ -102,12 +103,14 @@ namespace rb_tree {
    /// Binary insert
    ///
    template<typename T>
-   inline void binary_insertion(Node<T>*& node, T val)
+   void binary_insertion(Node<T>*& node, T val)
    {
       Node<T>* z = new Node<T>(val);
 
       if (node == nullptr)
+      {
          node = z;
+      }
       else
       {
          Node<T>* parent = nullptr;
@@ -115,17 +118,30 @@ namespace rb_tree {
          while (tmp)
          {
             parent = tmp;
-            if (val <= tmp->val_)
+            
+            if (val < tmp->val_) {
                tmp = tmp->left_;
-            else
+            }
+            else if( val > tmp->val_) {
                tmp = tmp->right_;
+            }
+            else {
+               tmp->val_ = val;
+               break;
+            }
          }
+         
          assert(parent != nullptr);
 
-         if (val <= parent->val_)
+         if (val < parent->val_)
+         {
             parent->left_ = z;
-         else
+         }
+         else if( val > parent->val_)
+         {
             parent->right_ = z;
+         }
+         //else .. nothing to do
 
          z->parent_ = parent;
       }

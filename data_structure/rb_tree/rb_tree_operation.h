@@ -10,7 +10,7 @@ namespace rb_tree {
    /// rotate left
    ///
    template < typename T >
-   inline void rotate_left(Node<T>*& root, Node<T>*& x)
+   void rotate_left(Node<T>*& root, Node<T>*& x)
    {
       using Node = Node < T >*;
 
@@ -39,7 +39,7 @@ namespace rb_tree {
    /// rotate right
    ///
    template<typename T>
-   inline void rotate_right(Node<T>*& root, Node<T>*& y)
+   void rotate_right(Node<T>*& root, Node<T>*& y)
    {
       using Node = Node < T >*;
 
@@ -68,7 +68,7 @@ namespace rb_tree {
    /// find value in tree
    ///
    template<typename T>
-   inline Node<T>* find(Node<T>* root, const T& key)
+   Node<T>* find(Node<T>* root, const T& key)
    {
       using Node = Node<T>*;
 
@@ -89,7 +89,7 @@ namespace rb_tree {
    /// find min value in tree
    ///
    template<typename T>
-   inline Node<T>* find_min(Node<T>* node)
+   Node<T>* find_min(Node<T>* node)
    {
       if (node == nullptr)
          return nullptr;
@@ -103,7 +103,7 @@ namespace rb_tree {
    /// find max value in tree
    ///
    template<typename T>
-   inline Node<T>* find_max(Node<T>* node)
+   Node<T>* find_max(Node<T>* node)
    {
       if (node == nullptr)
          return nullptr;
@@ -141,7 +141,7 @@ namespace rb_tree {
    /// @return: floor key or nullptr
    ///
    template<typename T>
-   inline Node<T>* floor(Node<T>* node, const T& x)
+   Node<T>* floor(Node<T>* node, const T& x)
    {
       using Node = Node < T >* ;
       Node floor_ = nullptr;
@@ -184,7 +184,7 @@ namespace rb_tree {
    /// @return: ceiling key or nullptr
    ///
    template<typename T>
-   inline Node<T>* ceiling(Node<T>* node, const T& x)
+   Node<T>* ceiling(Node<T>* node, const T& x)
    {
       using Node = Node < T >*;
       Node ceiling_ = nullptr;
@@ -208,7 +208,7 @@ namespace rb_tree {
    /// @return: nullptr or x-th order statistic
    ///
    template <typename T>
-   inline Node<T>* select(Node<T>* node, const T& x)
+   Node<T>* select(Node<T>* node, const T& x)
    {
       return nullptr;
    }
@@ -220,7 +220,7 @@ namespace rb_tree {
    /// @return: number of keys less than x
    ///
    template <typename T>
-   inline int rank(Node<T>* node, const T& x)
+   int rank(Node<T>* node, const T& x)
    {
       return 0;
    }

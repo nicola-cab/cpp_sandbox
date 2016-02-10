@@ -14,7 +14,7 @@ using rb_tree_node::Color;
 namespace rb_tree {
 
    template<typename T>
-   inline void rb_tree_delete_fix_up(Node<T>*& root, Node<T>*& node)
+   void rb_tree_delete_fix_up(Node<T>*& root, Node<T>*& node)
    {
       using Node = Node< T >*;
       Node w = nullptr;
@@ -98,7 +98,7 @@ namespace rb_tree {
    /// Transplat operation
    ///
    template<typename T>
-   inline void transplant(Node<T>*& root, Node<T>*u, Node<T>*v)
+   void transplant(Node<T>*& root, Node<T>*u, Node<T>*v)
    {
       if (u->parent_ == nullptr)
          root = v;

@@ -1,24 +1,20 @@
 // RB_Tree.cpp : Defines the entry point for the console application.
 //
 
-#include "stdafx.h"
 
 //to see how much standard library kicks my ass
 #include <set>
 #include <chrono>
 #include <random>
+#include <algorithm>
+#include <iostream>
+#include <string>
 
 #include "rb_tree.h"
 
-
-#include<random>
-#include <algorithm>
-#include <iostream>
-#include <chrono>
-
 using namespace  std;
 
-const unsigned int N = 10;
+const unsigned int SIZE = 1000;
 
 template<typename S,typename T>
 S insert_set(const std::vector<T>& v)
@@ -42,7 +38,7 @@ S insert_set(const std::vector<T>& v)
 }
 
 template<typename Result, typename Set, typename Value>
-Result find(Set& set, const Value& value)
+Result find(const std::string& name, Set& set, const Value& value)
 {
    auto start = chrono::steady_clock::now();
 
@@ -52,7 +48,7 @@ Result find(Set& set, const Value& value)
    auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start);
 
    
-   std::cout << "Finding operation takes = " << duration.count() << " ns" << endl;
+   std::cout << "Tree used -> " << name << " --> time taken = " << duration.count() << " ns" << endl;
 
    return res;
 }
@@ -70,8 +66,13 @@ void erase( Set& s, const Value& v)
    }
 }
 
-int _tmain(int argc, _TCHAR* argv[])
+int main(int argc, char* argv[])
 {
+   auto N = SIZE;
+   if(argc == 2 )
+      N = std::atoi(argv[1]);
+   
+      
    std::default_random_engine engine(std::random_device{}());
    std::uniform_int_distribution<> dist(1, N);
 
@@ -79,7 +80,7 @@ int _tmain(int argc, _TCHAR* argv[])
    for (int i = 1; i < N; ++i)
       myvector.push_back(dist(engine));
 
-   std::cout << "STL set shipped with VS takes to insert N=" << N << " elements .... ";
+   std::cout << "STL set used takes to insert N=" << N << " elements .... ";
    std::set<int> stl_set_ = insert_set<decltype(stl_set_), int>(myvector);
 
    std::cout << "My implementation set takes to insert N=" << N << " elements .... ";
@@ -93,24 +94,28 @@ int _tmain(int argc, _TCHAR* argv[])
 
    //find using my set
    try { 
-      auto r = find<int, decltype(my_set_), decltype(value)>(my_set_,value);
-      cout << "Value found using my rb tree!!! r= " << r << endl;
+      auto r = find<int, decltype(my_set_), decltype(value)>("rb tree",my_set_,value);
+      cout << "Value found using my rb_tree = " << r << endl;
    }
-   catch (std::exception & e)
-   { cout << e.what() << endl; }
+   catch (std::exception & e) {
+      cout << e.what() << endl;
+   }
 
    //find using stl
    auto r = find<set<int>::iterator, 
       decltype(stl_set_), 
-      decltype(value)> (stl_set_, value);
+      decltype(value)> ("stl set",stl_set_, value);
 
    if (r != stl_set_.end() )
-      cout << "Value found using stl set!!! r= " << *(r) << endl;
+   {
+      cout << "Value found using stl set = " << *(r) << endl;
+   }
    else
    {
       cout << "Value not found using stl tree!!! "<< endl;
    }
 
+   /*
    try {
       auto res = my_set_.floor(5);
       cout << " floor(5) =" << res << endl;
@@ -125,15 +130,13 @@ int _tmain(int argc, _TCHAR* argv[])
    }
    catch (std::exception& e) {
       cout << e.what() << endl;
-   }
+   }*/
    
 
    //tree traversal
    if ( N <= 10 )
       my_set_.level_walk();
    
-   fflush(stdin);
-   getchar();
-	return 0;
+   return 0;
 }
 
