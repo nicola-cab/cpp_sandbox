@@ -7,6 +7,9 @@ Usually I program in C++11/14 so in this folder a might put also same sample of 
 
 Folders (this list might change ... )
 
+- ***data structure*** 
+folder containing implementaton of some data structure that I am interested in 
+
 - ***functional*** 
 comparison between a bunch of stl algorithms and tail recursive ones written by me
 
