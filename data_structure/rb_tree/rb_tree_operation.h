@@ -10,7 +10,7 @@ namespace rb_tree {
    /// rotate left
    ///
    template < typename T >
-   void rotate_left(Node<T>*& root, Node<T>*& x)
+   inline void rotate_left(Node<T>*& root, Node<T>*& x)
    {
       using Node = Node < T >*;
 
@@ -39,7 +39,7 @@ namespace rb_tree {
    /// rotate right
    ///
    template<typename T>
-   void rotate_right(Node<T>*& root, Node<T>*& y)
+   inline void rotate_right(Node<T>*& root, Node<T>*& y)
    {
       using Node = Node < T >*;
 
@@ -68,7 +68,7 @@ namespace rb_tree {
    /// find value in tree
    ///
    template<typename T>
-   Node<T>* find(Node<T>* root, const T& key)
+   inline Node<T>* find(Node<T>* root, const T& key)
    {
       using Node = Node<T>*;
 
@@ -89,7 +89,7 @@ namespace rb_tree {
    /// find min value in tree
    ///
    template<typename T>
-   Node<T>* find_min(Node<T>* node)
+   inline Node<T>* find_min(Node<T>* node)
    {
       if (node == nullptr)
          return nullptr;
@@ -103,7 +103,7 @@ namespace rb_tree {
    /// find max value in tree
    ///
    template<typename T>
-   Node<T>* find_max(Node<T>* node)
+   inline Node<T>* find_max(Node<T>* node)
    {
       if (node == nullptr)
          return nullptr;
@@ -113,26 +113,6 @@ namespace rb_tree {
       return node;
    }
 
-
-   /*
-   // Floor recursive implementation
-
-   if (node == nullptr)
-   return nullptr;
-
-   if (node->val_ == x)
-   return node;
-
-   if ( x < node->val_)
-   return floor(node->left_, x);
-
-   auto tmp = floor(node->right_, x);
-   if (tmp != nullptr)
-   return tmp;
-
-   return node;
-   */
-
    ///
    /// floor for Binary Search tree
    /// @desc: floor is the greatest key inside the tree <= x
@@ -141,7 +121,7 @@ namespace rb_tree {
    /// @return: floor key or nullptr
    ///
    template<typename T>
-   Node<T>* floor(Node<T>* node, const T& x)
+   inline Node<T>* floor(Node<T>* node, const T& x)
    {
       using Node = Node < T >* ;
       Node floor_ = nullptr;
@@ -156,26 +136,6 @@ namespace rb_tree {
       return floor_; 
    }
 
-   
-   /*
-   //ceiling recurisive implementation
-
-   if (node == nullptr)
-   return nullptr;
-
-   if (node->val_ == x)
-   return node;
-
-   if (x > node->val_)
-   return ceiling(node->right_, x);
-
-   auto tmp = ceiling(node->left_, x);
-   if (tmp != nullptr)
-   return tmp;
-
-   return node;
-   */
-
    ///
    /// ceiling for Binary Search tree:
    /// @desc: ceiling is the lower key inside the tree >= x 
@@ -184,12 +144,12 @@ namespace rb_tree {
    /// @return: ceiling key or nullptr
    ///
    template<typename T>
-   Node<T>* ceiling(Node<T>* node, const T& x)
+   inline Node<T>* ceil(Node<T>* node, const T& x)
    {
       using Node = Node < T >*;
       Node ceiling_ = nullptr;
       while (node != nullptr) {
-         if (x > node->val_)
+         if (x >= node->val_)
             node = node->right_;
          else {
             ceiling_ = node;
@@ -202,25 +162,25 @@ namespace rb_tree {
    }
 
    ///
-   /// select the ith element inside tree (i-th order statics)
+   /// @brief: select the k-th order statics in the tree
    /// @param: node
    /// @param: x (th statics order to retrieve)
    /// @return: nullptr or x-th order statistic
    ///
    template <typename T>
-   Node<T>* select(Node<T>* node, const T& x)
+   inline Node<T>* select(Node<T>* node, std::size_t k)
    {
       return nullptr;
    }
 
    ///
-   /// select the ith element inside tree (i-th order statics)
+   /// @brief: return the number of keys less than x
    /// @param: node
    /// @param: x 
    /// @return: number of keys less than x
    ///
    template <typename T>
-   int rank(Node<T>* node, const T& x)
+   inline int rank(Node<T>* node, const T& x)
    {
       return 0;
    }

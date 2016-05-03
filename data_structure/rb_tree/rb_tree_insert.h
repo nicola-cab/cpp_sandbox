@@ -14,12 +14,12 @@ using rb_tree_node::Color;
 
 namespace rb_tree {
 
-   // fix-up for rb tree. Fix up made by composition
-   // Accordingly with MIT's book "Introduction to alogorithms" - CLRS,
-   // there are 6 possible case where it is needed to fix the tree.
+   //fix-up for rb tree. Fix up made by composition
+   // Accordingly with MIT's book "Introduction to alogorithms", 
+   // there are 6 possible cases where it is needed fix the tree.
 
    template<typename T>
-   void rb_tree_insert_fix_up(Node<T>*& root, Node<T>*& node)
+   inline void rb_tree_insert_fix_up(Node<T>*& root, Node<T>*& node)
    {
       using Node = Node < T >*;
 
@@ -103,14 +103,12 @@ namespace rb_tree {
    /// Binary insert
    ///
    template<typename T>
-   void binary_insertion(Node<T>*& node, T val)
+   inline bool binary_insertion(Node<T>*& node, T val)
    {
       Node<T>* z = new Node<T>(val);
 
       if (node == nullptr)
-      {
          node = z;
-      }
       else
       {
          Node<T>* parent = nullptr;
@@ -118,35 +116,36 @@ namespace rb_tree {
          while (tmp)
          {
             parent = tmp;
-            
-            if (val < tmp->val_) {
-               tmp = tmp->left_;
-            }
-            else if( val > tmp->val_) {
-               tmp = tmp->right_;
-            }
-            else {
+
+            //no duplicates are allowed
+            if (val == tmp->val_) {
                tmp->val_ = val;
-               break;
+               return false;
             }
+               
+               
+            if (val < tmp->val_)
+               tmp = tmp->left_;
+            else
+               tmp = tmp->right_;
+
          }
-         
+
          assert(parent != nullptr);
 
-         if (val < parent->val_)
-         {
+         if (val <= parent->val_)
             parent->left_ = z;
-         }
-         else if( val > parent->val_)
-         {
+         else
             parent->right_ = z;
-         }
-         //else .. nothing to do
 
          z->parent_ = parent;
       }
 
       rb_tree_insert_fix_up(node, z);
+
+    
+      z->size_ = 1 + rb_tree_node::size(z->left_) + rb_tree_node::size(z->right_);
+      return true;
    }
 
 };

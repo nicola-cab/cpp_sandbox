@@ -5,7 +5,10 @@
 
 #pragma once
 
-namespace rb_tree_node {
+#include <cstddef>
+
+namespace rb_tree_node 
+{
 
    ///
    /// Node structure
@@ -14,21 +17,24 @@ namespace rb_tree_node {
    enum Color{ black = 0, red = 1 };
 
    template <typename T>
-   struct Node {
+   struct Node 
+   {
       using value_type = T;
 
-      T val_;
-      Node* left_;
-      Node* right_;
-      Node* parent_;
-      Color color_;
+      T val_;              //!< value held in the node  
+      Node* left_;         //!< left sub tree 
+      Node* right_;        //!< right sub tree 
+      Node* parent_;       //!<pointer to the parent 
+      Color color_;        //!<color of the node (balacing) 
+      std::size_t size_;   //!<size of the subtree rooted 
 
       explicit Node(T val = 0,
          Node* parent = nullptr,
          Node* left = nullptr,
          Node* right = nullptr,
-         Color color = Color::red) :
-         val_(val), left_(left), right_(right), parent_(parent), color_(color)
+         Color color = Color::red, 
+         std::size_t size = 0) :
+         val_(val), left_(left), right_(right), parent_(parent), color_(color), size_(size)
       {}
 
       //copyable but not movable
@@ -49,11 +55,21 @@ namespace rb_tree_node {
          if (g)
             return nullptr;
 
-         if (left_ == g->left_) //I am left son
-            return g->right_; //uncle is the right son
+         if (left_ == g->left_) //I am left leaf
+            return g->right_; //uncle is the right leaf
 
-         return g->left_;  //uncle is the left son  
+         return g->left_;  //uncle is the left leaf  
       }
    };
 
+   ///
+   /// @brief: return the size of the rooted subtree
+   /// 
+   template <typename T>
+   std::size_t size(const Node<T>* node)
+   {
+      if (node)
+         return node->size_;
+      return 0;
+   }
 };

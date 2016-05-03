@@ -4,30 +4,46 @@
 #include "rb_tree_delete.h"
 #include "rb_tree_visit.h"
 
+#if defined (WIN32)
+#define NOEXCPT _NOEXCEPT
+#else
+#define NOEXCPT noexcept 
+#endif
+
 namespace tree 
 {
    class NodeNotFound{};
 
    template<typename T>
-   class set {
+   class set 
+   {
 
       using value_type = T;
       using Node = Node < value_type >;
       Node* root_;
+      std::size_t size_;
 
       ///
-      /// surprisingly this recursive function 
-      /// outperforms a iteratively one (using a queue). 
+      /// @brief: erase all the nodes of the tree 
+      ///         (no recursion, over 100000 items is not doable)
       ///
       void free_tree(Node* node)
       {
-         if (node == nullptr)
-            return;
-         if (node->left_ != nullptr)
-            free_tree(node->left_);
-         if (node->right_ != nullptr)
-            free_tree(node->right_);
-         delete node;
+         std::queue<Node*> q;
+         q.push(node);
+
+         while (!q.empty())
+         { 
+            auto n = q.front();
+            q.pop();
+            
+            if (n->left_)
+               q.push(n->left_);
+            if (n->right_)
+               q.push(n->right_);    
+
+            delete n;
+         }
       }
      
       public:
@@ -35,7 +51,7 @@ namespace tree
          ///
          /// ctor
          ///
-         explicit set() : root_(nullptr) 
+         explicit set() : root_(nullptr), size_(0)
          {}
 
          //
@@ -51,7 +67,9 @@ namespace tree
          set(set&& s)
          { 
             root_ = s.root_;
+            size_ = s.size_;
             s.root_ = nullptr;
+            s.size_ = 0;
          }
 
          ///
@@ -63,6 +81,7 @@ namespace tree
             {
                free_tree( root_ );
                root_ = nullptr;  
+               size_ = 0;
             }
             
          }
@@ -71,8 +90,10 @@ namespace tree
          /// insertion in rb tree.
          /// @value: value to insert inside rb tree
          ///
-         void insert(value_type value) {
-            rb_tree::binary_insertion(root_, value);
+         void insert(value_type value)
+         {
+            auto res = rb_tree::binary_insertion(root_, value);
+            size_ += res == true ? 1 : 0;
          }
 
          ///
@@ -80,13 +101,12 @@ namespace tree
          /// @value: value to search and delete from tree
          /// @return: value deleted or throw exception
          ///
-         value_type erase(const value_type& value) {
+         void erase(const value_type& value) {
             auto tmp = rb_tree::binary_erase(root_, value);  
-            if (tmp != nullptr) {
-               // potentional heavy operation here.
-               value_type val_ = tmp->val_ ;
-               delete tmp;
-               return val_; //here compiler should help me .. I guess a copy elison
+            if (tmp != nullptr) 
+            {
+               delete tmp; 
+               --size_;
             }
             else {
                throw std::logic_error("Value to delete not found!");
@@ -107,19 +127,35 @@ namespace tree
          }
 
          ///
-         /// walk through the tree using a visit in order
+         /// in order visit of the tree
          ///
-         void tree_walk() const
+         std::vector<value_type> in_order_walk() const
          {
-            rb_tree::visit_in_order(root_);
+            return rb_tree::visit_in_order(root_);
          }
 
          ///
-         /// level walk traversal for tree
+         /// pre order visit of the tree
          ///
-         void level_walk()
+         std::vector<value_type> pre_order_walk() const
          {
-            rb_tree::level_visit(root_);
+            return rb_tree::visit_pre_order(root_);
+         }
+
+         ///
+         /// post order visit of the tree
+         ///
+         std::vector<value_type> post_order_walk() const
+         {
+            return rb_tree::visit_post_order(root_);
+         }
+
+         ///
+         /// level order visit (BSF)
+         ///
+         std::vector<value_type> level_walk() const
+         {
+            return rb_tree::level_visit(root_);
          }
 
          /// utilities operation
@@ -141,8 +177,6 @@ namespace tree
                auto res_ = rb_tree::find_min(root_);
                return res_->val_;
             }
-               
-
             throw std::logic_error("empty set");
          }
          ///
@@ -165,7 +199,7 @@ namespace tree
          ///         floor(x) = |_ x _|
          /// @return: the floor of x or a logic error if invoked on empty set 
          ///
-         value_type floor( const value_type& x ) const 
+         value_type lower_bound( const value_type& x ) const 
          {
             if (!is_empty())
             {
@@ -182,17 +216,72 @@ namespace tree
          ///         ceiling(x) = [x]
          /// @return: the ceiling of x or a logic error if invoked on empty set 
          ///
-         value_type ceiling(const value_type& x) const
+         value_type upper_bound(const value_type& x) const
          {
             if (!is_empty())
             {
-               auto res_ = rb_tree::ceiling(root_, x);
+               auto res_ = rb_tree::ceil(root_, x);
                if ( res_ != nullptr)
                   return res_->val_;
             }
             throw std::logic_error("value not found");
          }
 
+         ///
+         /// @brief: return if 2 trees are equal
+         /// @note: is this the best way to perfrom this task? this algorithm takes 
+         ///        O(2n) + O(n) to compare. Another algorithm that allows me to stop
+         ///        immediately when the first item is missing will be O(n lg n).
+         ///
+         friend inline bool operator == (const set<T>& lhs, const set<T>& rhs) 
+         {
+            const auto& left = rb_tree::visit_in_order(lhs._root);
+            const auto& right = rb_tree::visit_in_order(rhs._root);
+            return (left == right);
+         }
+
+         ///
+         /// @brief: return if 2 trees are not equal
+         ///
+         friend inline bool operator != (const set<T>& lhs, const set<T>& rhs)
+         {
+            return !(lhs == rhs);
+         }
+
+         ///
+         /// @brief: return the number of element held 
+         ///
+
+         std::size_t size() const
+         {
+            return size_;
+         }
+
+         std::size_t size() 
+         {
+            return size_;
+         }
+
+         /// 
+         /// @brief: return weather the tree is empty or not
+         ///
+         bool empty() const
+         {
+            return size_ == 0;
+         }
+
+         bool empty()
+         {
+            return size_ == 0;
+         }
+
+         ///
+         /// @brief: swap 2 trees
+         ///
+         void swap(set<T>& s) NOEXCPT
+         {
+            std::swap(s.root_, root_);
+         }
    };
 
 }
