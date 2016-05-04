@@ -26,15 +26,15 @@ namespace rb_tree_node
       Node* right_;        //!< right sub tree 
       Node* parent_;       //!<pointer to the parent 
       Color color_;        //!<color of the node (balacing) 
-      std::size_t size_;   //!<size of the subtree rooted 
+      std::size_t count_;   //!<size of the subtree rooted
 
       explicit Node(T val = 0,
          Node* parent = nullptr,
          Node* left = nullptr,
          Node* right = nullptr,
          Color color = Color::red, 
-         std::size_t size = 0) :
-         val_(val), left_(left), right_(right), parent_(parent), color_(color), size_(size)
+         std::size_t count = 0) :
+         val_(val), left_(left), right_(right), parent_(parent), color_(color), count_(count)
       {}
 
       //copyable but not movable
@@ -69,7 +69,7 @@ namespace rb_tree_node
    std::size_t size(const Node<T>* node)
    {
       if (node)
-         return node->size_;
+         return node->count_;
       return 0;
    }
 };

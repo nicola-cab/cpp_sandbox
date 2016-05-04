@@ -180,7 +180,7 @@ namespace rb_tree {
          rb_tree_delete_fix_up(root, x);
 
       if (n->parent_ != nullptr)
-         n->parent_->size_ = 1 + rb_tree_node::size(n->parent_->left_) + rb_tree_node::size(n->parent_->right_);
+         n->parent_->count_ = 1 + rb_tree_node::size(n->parent_->left_) + rb_tree_node::size(n->parent_->right_);
 
       return n;
    }

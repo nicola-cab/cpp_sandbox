@@ -3,6 +3,7 @@
 #include "rb_tree_insert.h"
 #include "rb_tree_delete.h"
 #include "rb_tree_visit.h"
+#include "rb_tree_integrity_check.h"
 
 #if defined (WIN32)
 #define NOEXCPT _NOEXCEPT
@@ -12,11 +13,11 @@
 
 namespace tree 
 {
-   class NodeNotFound{};
-
    template<typename T>
    class set 
    {
+      
+      friend class rb_tree_integrity::check_tree<T>;
 
       using value_type = T;
       using Node = Node < value_type >;
@@ -230,8 +231,11 @@ namespace tree
          ///
          /// @brief: return if 2 trees are equal
          /// @note: is this the best way to perfrom this task? this algorithm takes 
-         ///        O(2n) + O(n) to compare. Another algorithm that allows me to stop
-         ///        immediately when the first item is missing will be O(n lg n).
+         ///        O(2n) + O(n) to compare plus O(2N) space.
+         //         Another algorithm that allows me to stop
+         ///        immediately when the first item is missing would be O(n lg n).
+         ///        Otherwise a recursive implementation could also work.. even though
+         ///        the depth of recursion for certain trees could blow the stack
          ///
          friend inline bool operator == (const set<T>& lhs, const set<T>& rhs) 
          {

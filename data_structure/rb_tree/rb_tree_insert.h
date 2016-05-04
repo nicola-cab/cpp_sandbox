@@ -144,7 +144,7 @@ namespace rb_tree {
       rb_tree_insert_fix_up(node, z);
 
     
-      z->size_ = 1 + rb_tree_node::size(z->left_) + rb_tree_node::size(z->right_);
+      z->count_ = 1 + rb_tree_node::size(z->left_) + rb_tree_node::size(z->right_);
       return true;
    }
 
