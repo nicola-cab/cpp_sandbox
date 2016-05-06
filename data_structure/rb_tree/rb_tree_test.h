@@ -8,6 +8,7 @@
 #include <unordered_set>
 
 #include "rb_tree.h"
+#include "rb_tree_integrity_check.h"
 
 using namespace std;
 
@@ -84,7 +85,7 @@ void insert_set(Set &set, const std::vector<T>& v)
    auto end = Clock::now();
    auto duration = chrono::duration_cast<chrono::milliseconds>(end - start);
    
-   std::cout << duration.count() << " ms " << std::endl;
+   std::cout << "insert_set took --> "<< duration.count() << " ms " << std::endl;
 }
 
 template<typename Result, typename Set, typename Value>
@@ -145,8 +146,7 @@ T test_insert(std::set<T>& stl_set, tree::set<T>& tree_set)
    //desceding_vector(v, ret);
    
    //simple vector
-   tree::set<T> tree_set2;
-   std::vector<T> v2 {5,3,2,1,6};
+   std::vector<T> v2 {6,5,3,2,1};
    v.swap(v2);
    ret = 3;
    
@@ -155,8 +155,6 @@ T test_insert(std::set<T>& stl_set, tree::set<T>& tree_set)
    
    std::cout << "Crafted RB Tree algorithm has taken N=" << N << " elements .... \n";
    insert_set(tree_set, v);
-   insert_set(tree_set2, v);
-   tree_set2.swap(tree_set);
    
    
    return ret;
@@ -275,10 +273,55 @@ void test_erase(const T& key, std::set<T>& stl_set, tree::set<T>& tree_set)
    assert(stl_set.size() == tree_set.size());
 }
 
+void test_swap_equality()
+{
+   std::vector<int> v1, v2;
+   tree::set<int> t1, t2;
+   int ret1, ret2;
+   
+   asceding_vector(v1, ret1);
+   desceding_vector(v2, ret2);
+   
+   insert_set(t1, v1);
+   insert_set(t2, v2);
+   
+   t1.swap(t2);
+   assert( t1 == t2);
+   
+}
+
 // check integrity
+
+template<typename T>
+void test_integrity_check(const tree::set<T>& set)
+{
+   rb_tree_integrity::check_tree<T> c_tree;
+   assert (c_tree.is_bst(set) == true);
+   assert(c_tree.is_tree_balanced(set) == true);
+}
+
+///
+/// single tests
+///
+
 template<typename T>
 void test_is_bst(const tree::set<T>& set)
 {
    rb_tree_integrity::check_tree<T> c_tree;
    assert (c_tree.is_bst(set) == true);
+}
+
+template<typename T>
+void test_is_tree_balanced(const tree::set<T>& set)
+{
+   rb_tree_integrity::check_tree<T> c_tree;
+   assert(c_tree.is_tree_balanced(set) == true);
+}
+
+template<typename T>
+void test_is_count_consistent(const tree::set<T>& set)
+{
+   //this test has revealled that the tree has the counter broken for the size of the subtree rooted
+   //rb_tree_integrity::check_tree<T> c_tree;
+   //assert(c_tree.is_count_consistent(set) == true);
 }

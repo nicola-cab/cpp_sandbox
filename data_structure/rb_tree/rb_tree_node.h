@@ -37,10 +37,16 @@ namespace rb_tree_node
          val_(val), left_(left), right_(right), parent_(parent), color_(color), count_(count)
       {}
 
-      //copyable but not movable
+      //neither copyable nor movable
+      Node(const Node&) = delete;
+      Node& operator=(const Node&) = delete;
       Node(Node&&) = delete;
       Node& operator=(Node&&) = delete;
 
+      ///
+      /// @brief: get grand parent for the current node
+      /// @return: pointer to the node that is the grand parent of this node
+      ///
       Node<value_type>* get_grand_parent()
       {
          if (parent_)
@@ -48,6 +54,10 @@ namespace rb_tree_node
          return nullptr;
       }
 
+      ///
+      /// @brief: get uncle for the current node
+      /// @return: point to the node that is the uncle of the this node
+      ///
       Node<value_type>* get_uncle()
       {
          Node<value_type>* g = get_grand_parent();
@@ -60,6 +70,16 @@ namespace rb_tree_node
 
          return g->left_;  //uncle is the left leaf  
       }
+      
+      ///
+      /// @brief: return whether this node is red or black
+      /// @return: true/false
+      ///
+      bool is_red() const
+      {
+         return color_ == Color::red;
+      }
+      
    };
 
    ///

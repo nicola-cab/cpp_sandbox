@@ -122,8 +122,7 @@ namespace rb_tree {
                tmp->val_ = val;
                return false;
             }
-               
-               
+            
             if (val < tmp->val_)
                tmp = tmp->left_;
             else
@@ -143,8 +142,8 @@ namespace rb_tree {
 
       rb_tree_insert_fix_up(node, z);
 
-    
-      z->count_ = 1 + rb_tree_node::size(z->left_) + rb_tree_node::size(z->right_);
+      if( z->parent_ != nullptr )
+         z->parent_->count_ = 1 + rb_tree_node::size(z->parent_->left_) + rb_tree_node::size(z->parent_->right_);
       return true;
    }
 

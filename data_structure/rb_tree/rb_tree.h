@@ -3,7 +3,6 @@
 #include "rb_tree_insert.h"
 #include "rb_tree_delete.h"
 #include "rb_tree_visit.h"
-#include "rb_tree_integrity_check.h"
 
 #if defined (WIN32)
 #define NOEXCPT _NOEXCEPT
@@ -11,19 +10,30 @@
 #define NOEXCPT noexcept 
 #endif
 
+
+namespace rb_tree_integrity
+{
+   template <typename T> class check_tree;
+}
+
 namespace tree 
 {
    template<typename T>
    class set 
    {
-      
-      friend class rb_tree_integrity::check_tree<T>;
-
       using value_type = T;
       using Node = Node < value_type >;
       Node* root_;
       std::size_t size_;
 
+      ///
+      /// @brief: integrity checks are not part of this class.
+      ///         the integrity check algorithms are based on the use of
+      ///         the root node for this tree.
+      ///         Then I need to make the check_tree class friend of this
+      ///
+      friend rb_tree_integrity::check_tree<T>;
+      
       ///
       /// @brief: erase all the nodes of the tree 
       ///         (no recursion, over 100000 items is not doable)
@@ -239,8 +249,8 @@ namespace tree
          ///
          friend inline bool operator == (const set<T>& lhs, const set<T>& rhs) 
          {
-            const auto& left = rb_tree::visit_in_order(lhs._root);
-            const auto& right = rb_tree::visit_in_order(rhs._root);
+            const auto& left = rb_tree::visit_in_order(lhs.root_);
+            const auto& right = rb_tree::visit_in_order(rhs.root_);
             return (left == right);
          }
 

@@ -12,11 +12,14 @@ int main(int argc, char* argv[])
    tree::set<int> tree_set;
 
    auto key = test_insert(stl_set, tree_set);
+   test_swap_equality();
    test_find(key, stl_set, tree_set);
    test_lower_upper_bound(key, stl_set, tree_set);
-   test_erase(key, stl_set, tree_set);
+   //test_erase(key, stl_set, tree_set);
    test_equality_tree(stl_set, tree_set);
-   test_is_bst(tree_set);
+   
+   //test correctness of the rb_tree
+   test_integrity_check(tree_set);
 
    return 0;
 }
