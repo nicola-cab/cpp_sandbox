@@ -296,32 +296,8 @@ template<typename T>
 void test_integrity_check(const tree::set<T>& set)
 {
    rb_tree_integrity::check_tree<T> c_tree;
-   assert (c_tree.is_bst(set) == true);
+   assert(c_tree.is_bst(set) == true);
+   assert(c_tree.is_tree_23(set) == true);
    assert(c_tree.is_tree_balanced(set) == true);
-}
-
-///
-/// single tests
-///
-
-template<typename T>
-void test_is_bst(const tree::set<T>& set)
-{
-   rb_tree_integrity::check_tree<T> c_tree;
-   assert (c_tree.is_bst(set) == true);
-}
-
-template<typename T>
-void test_is_tree_balanced(const tree::set<T>& set)
-{
-   rb_tree_integrity::check_tree<T> c_tree;
-   assert(c_tree.is_tree_balanced(set) == true);
-}
-
-template<typename T>
-void test_is_count_consistent(const tree::set<T>& set)
-{
-   //this test has revealled that the tree has the counter broken for the size of the subtree rooted
-   //rb_tree_integrity::check_tree<T> c_tree;
-   //assert(c_tree.is_count_consistent(set) == true);
+   assert(c_tree.is_count_consistent(set) == true);
 }

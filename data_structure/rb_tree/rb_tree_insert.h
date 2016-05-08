@@ -31,17 +31,18 @@ namespace rb_tree {
          (node->parent_->color_ == Color::red))
       {
          parent = node->parent_;
-         grand_parent = node->get_grand_parent();
+         grand_parent = get_grand_parent(node);
 
          //Case A:
          //    Parent is left child
          if (parent == grand_parent->left_)
          {
-            Node uncle = node->get_uncle();
+            Node uncle = get_uncle(node);
 
             // case 1: 
             //    Uncle is red --> recoloring
-            if ((uncle != nullptr) && (uncle->color_ == Color::red)) {
+            if ((uncle != nullptr) && (uncle->color_ == Color::red))
+            {
                grand_parent->color_ = Color::red;
                parent->color_ = Color::black;
                uncle->color_ = Color::black;
@@ -50,8 +51,10 @@ namespace rb_tree {
             else {
                //case 2: 
                //   node is right child.. needed left rotation
-               if (node == parent->right_) {
+               if (node == parent->right_)
+               {
                   node = parent;
+                  node->count_ = 1; //reset number of nodes rooted
                   rotate_left(root, parent);
                }
 
@@ -59,6 +62,7 @@ namespace rb_tree {
                // node is left child... needed right rotate
                parent->color_ = Color::black;
                grand_parent->color_ = Color::red;
+               grand_parent->count_ = 1; //reset number of nodes rooted
                rotate_right(root, grand_parent);
             }
 
@@ -67,22 +71,25 @@ namespace rb_tree {
          //    Parent is right child    
          else
          {
-            Node uncle = node->get_uncle();
+            Node uncle = get_uncle(node);
 
             //case 1:
             //    Uncle is red
-            if (uncle != nullptr && uncle->color_ == Color::red) {
+            if (uncle != nullptr && uncle->color_ == Color::red)
+            {
                grand_parent->color_ = Color::red;
                parent->color_ = Color::black;
                uncle->color_ = Color::black;
                node = grand_parent;
             }
-            else {
+            else
+            {
                //case 2: 
                //   node is left child
                if (node == parent->left_)
                {
                   node = parent;
+                  node->count_ = 1; //reset number of nodes rooted
                   rotate_right(root, parent);
                }
 
@@ -90,6 +97,7 @@ namespace rb_tree {
                //    node is right child
                parent->color_ = Color::black;
                grand_parent->color_ = Color::red;
+               grand_parent->count_ = 1; //reset number of nodes rooted
                rotate_left(root, grand_parent);
             }
          }
@@ -132,7 +140,7 @@ namespace rb_tree {
 
          assert(parent != nullptr);
 
-         if (val <= parent->val_)
+         if (val < parent->val_)
             parent->left_ = z;
          else
             parent->right_ = z;
@@ -141,9 +149,9 @@ namespace rb_tree {
       }
 
       rb_tree_insert_fix_up(node, z);
-
-      if( z->parent_ != nullptr )
-         z->parent_->count_ = 1 + rb_tree_node::size(z->parent_->left_) + rb_tree_node::size(z->parent_->right_);
+      
+      rb_tree_node::compute_counter(z);
+      
       return true;
    }
 

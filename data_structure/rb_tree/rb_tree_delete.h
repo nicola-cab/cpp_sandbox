@@ -24,7 +24,7 @@ namespace rb_tree {
          if (node == node->parent_->left_)
          {
             //left sub tree
-            w = node->get_uncle();
+            w = rb_tree_node::get_uncle(node);
 
             if (w->color_ == Color::red)
             {
@@ -58,7 +58,7 @@ namespace rb_tree {
          }
          else //node == node->parent_->right_
          {
-            w = node->get_uncle();
+            w = rb_tree_node::get_uncle(node);
 
             if (w->color_ == Color::red)
             {
@@ -177,11 +177,12 @@ namespace rb_tree {
 
       //fix up for delete
       if (original_color == Color::black)
+      {
          rb_tree_delete_fix_up(root, x);
-
-      if (n->parent_ != nullptr)
-         n->parent_->count_ = 1 + rb_tree_node::size(n->parent_->left_) + rb_tree_node::size(n->parent_->right_);
-
+      }
+      
+      rb_tree_node::compute_counter(n);
+      
       return n;
    }
 };
