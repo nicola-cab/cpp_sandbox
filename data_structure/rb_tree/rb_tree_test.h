@@ -12,7 +12,7 @@
 
 using namespace std;
 
-const unsigned int N = 10;
+const unsigned int N = 5;
 using Clock = chrono::steady_clock;
 
 
@@ -143,12 +143,12 @@ T test_insert(std::set<T>& stl_set, tree::set<T>& tree_set)
    
    //random_vector(v, ret);
    //asceding_vector(v, ret);
-   //desceding_vector(v, ret);
+   desceding_vector(v, ret);
    
    //simple vector
-   std::vector<T> v2 {6,5,3,2,1};
-   v.swap(v2);
-   ret = 3;
+   //std::vector<T> v2 {6,5,3,2,1};
+   //v.swap(v2);
+   //ret = 3;
    
    std::cout << "STL set has taken to insert N=" << N << " elements .... \n";
    insert_set(stl_set, v);
@@ -275,6 +275,8 @@ void test_erase(const T& key, std::set<T>& stl_set, tree::set<T>& tree_set)
 
 void test_swap_equality()
 {
+   cout << "\n --- Test swap/equality crafted tree --- " << std::endl;
+   
    std::vector<int> v1, v2;
    tree::set<int> t1, t2;
    int ret1, ret2;
