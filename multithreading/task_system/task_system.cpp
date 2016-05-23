@@ -74,7 +74,7 @@ void test_bench(const F& f) {
 ///
 void fib() 
 {
-   result[g_index] = fibonacci<long>(500, computation::Algorithm_DP {});
+   result[g_index] = fibonacci<long>(500, computation::Algorithm_Egyptian {});
 }
 
 ///
