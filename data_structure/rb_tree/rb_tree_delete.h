@@ -24,9 +24,12 @@ namespace rb_tree {
          if (node == node->parent_->left_)
          {
             //left sub tree
-            w = rb_tree_node::get_uncle(node);
+            w = node->parent_->right_; //rb_tree_node::get_uncle(node);
+            
+            if( w == nullptr )
+               return;
 
-            if (w->color_ == Color::red)
+            if ( w->color_ == Color::red )
             {
                //sibling is red (change sibling colors and rotate left parent)
                w->color_ = Color::black;
@@ -58,7 +61,8 @@ namespace rb_tree {
          }
          else //node == node->parent_->right_
          {
-            w = rb_tree_node::get_uncle(node);
+            
+            w = w = node->parent_->left_;
 
             if (w->color_ == Color::red)
             {
@@ -169,10 +173,12 @@ namespace rb_tree {
          transplant(root, n, y);
          y->left_ = n->left_;
          y->left_->parent_ = y;
-
          //extension for RB tree
          y->color_ = n->color_;
-
+         
+        // x = y->left_;
+         //x = y->left_;
+         
       }
 
       //fix up for delete
@@ -181,7 +187,7 @@ namespace rb_tree {
          rb_tree_delete_fix_up(root, x);
       }
       
-      rb_tree_node::compute_counter(n);
+      rb_tree_node::compute_counter(x);
       
       return n;
    }

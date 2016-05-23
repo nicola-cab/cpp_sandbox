@@ -1,4 +1,4 @@
-// RB_Tree.cpp : Defines the entry point for the console application.
+ // RB_Tree.cpp : Defines the entry point for the console application.
 //
 
 //include "stdafx.h"
