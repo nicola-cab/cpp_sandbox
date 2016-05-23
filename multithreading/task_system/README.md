@@ -1,5 +1,7 @@
-Desing Task System (concurency presentation given by Sean Parent)  
+Desing Task System   
 ===================
+
+All this code has been partially copied and inspired by the talk given by Sean Parent on concurrency.
 
 Implementation of a simple task system + task stealing. The task system is implementend gradually, following different approaches. 
 There are 3 different implementations for this task system:
@@ -21,7 +23,7 @@ Important to notice that both the algorithms were run with a spin factor of 1000
 **OSX operating system
 
 | task system   | algorithm | N |avg time per computation | All computation (N*SPIN_FACTOR)|
-| ------------- |-------------| -----| --- 
+| --- |---| ---| --- |  --- |  ---   | ---      
 Single thread   |    dynamic programming   |  500 |  15us  |  ~1.6   sec   
 Single thread   |    egyptian mul          |  500 | 418ns  |  0.041  sec 
  1Q             |  dynamic programming     |  500 |  9us   |  0.95   sec
@@ -36,15 +38,15 @@ Single thread   |    egyptian mul          |  500 | 418ns  |  0.041  sec
 ** Windows operating system
 
 | task system   | algorithm | N |avg time per computation | All computation (N*SPIN_FACTOR)|
-| ------------- |-------------| -----| --- 
-Single thread   |    dynamic programming   |  500 |   |  | 
-Single thread   |    egyptian mul          |  500 |      |            
-1Q             |  dynamic programming     |  500 |    |  
-1Q             |  egyptian mul            |  500 |       |
-NQ             |  dynamic programming     |  500 |    |  
-NQ             | egyptian mul             |  500 |       |
-NSQ            | dynamic programming      |  500 |    |     
-NSQ            | egyptian mul             |  500 |    |  | 
+| ---           |   ---    | ---|    ---                  | ---   
+Single thread   |    dynamic programming   |  500 |       |   
+Single thread   |    egyptian mul          |  500 |       |         
+1Q             |  dynamic programming     |  500 |        |  
+1Q             |  egyptian mul            |  500 |        |
+NQ             |  dynamic programming     |  500 |        |  
+NQ             | egyptian mul             |  500 |        | 
+NSQ            | dynamic programming      |  500 |        |     
+NSQ            | egyptian mul             |  500 |        |   
 
 
 Conclusion
