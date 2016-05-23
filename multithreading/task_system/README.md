@@ -3,11 +3,11 @@ Desing Task System
 
 All this code has been partially copied and inspired by the talk given by Sean Parent on concurrency.
 
-Implementation of a simple task system + task stealing. The task system is implementend gradually, following different approaches. 
-There are 3 different implementations for this task system:
-1. only queue 1 producer and multiple consumers (1Q)
-2. one queue per thread 1 producer and multiple consumers (NQ)
-3. one queue per thread 1 producer and multiple consumers plus task stealing (NQS)
+All this code is about implementing of a simple task system + task stealing. The task system has been implementend gradually, following 3 different increment approaches. 
+These are 3 different implementations:
+* only queue 1 producer and multiple consumers (1Q)
+* one queue per thread 1 producer and multiple consumers (NQ)
+* one queue per thread 1 producer and multiple consumers plus task stealing (NQS)
 
 The queue used is not optimized. it is just a simple FIFO implementation using a std::deque.
 All the operations that attempt to push/pop from the queue are atomic and protected using a 
