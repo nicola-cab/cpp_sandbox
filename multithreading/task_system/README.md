@@ -20,7 +20,7 @@ Final goal is to replace the current queue with a lock free one in order to meau
 Fibonacci has been implemented using two different algorithm. The first one using DP, the second one copy the one presented in the book "From Mathematics to Generic Programming" that uses Egyptian Multiplication (honestly I have no idea on how it accomplishes fibonacci). 
 Important to notice that both the algorithms were run with a spin factor of 100000 in order to have a well gauced result
 
-*** OSX operating system ***
+#####OSX operating system 
 
 | task system   | algorithm | N |avg time per computation | All computation (N*SPIN_FACTOR)|
 | --- |---| ---| --- |  --- |  ---   | ---      
@@ -35,7 +35,7 @@ Single thread   |    egyptian mul          |  500 | 418ns  |  0.041  sec
  
 
 
-*** Windows operating system ***
+#####Windows operating system 
 
 | task system   | algorithm | N |avg time per computation | All computation (N*SPIN_FACTOR)|
 | ---           |   ---    | ---|    ---                  | ---   
