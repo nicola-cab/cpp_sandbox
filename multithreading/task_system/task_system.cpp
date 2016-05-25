@@ -48,11 +48,28 @@ using task_system_NQS_fine_alloc_t = task_system_task_stealing_t < queue_reserve
 /////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
+static task_system_1Q_t  task_system_1Q;
+static task_system_NQ_t  task_system_NQ;
+static task_system_NQS_t task_system_NQS;
+
+static task_system_1Q_fine_t task_system_1Q_fine;
+static task_system_NQ_fine_t task_system_NQ_fine;
+static task_system_NQS_fine_t task_system_NQS_fine;
+
+static task_system_1Q_fine_alloc_t task_system_1Q_fine_alloc;
+static task_system_NQ_fine_alloc_t task_system_NQ_fine_alloc;
+static task_system_NQS_fine_alloc_t task_system_NQS_fine_alloc;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 Timer timer;
 
 #define TIMER_START()  timer.start()
 #define TIMER_END() timer.end()
-#define TIMER_TIME() timer.elapsed<Timer::us>()
+#define TIMER_TIME() timer.elapsed<Timer::ns>()
 
 const unsigned int SPIN_FACTOR = 100000;
 
@@ -92,8 +109,8 @@ void test_bench(const F& f) {
       sum += TIMER_TIME();
    }
    
-   std::cout << sum / SPIN_FACTOR << " us\n";
-   std::cout << "Total time = " << (double)sum / 1000000 << " sec \n";
+   std::cout << sum / SPIN_FACTOR << " ns\n";
+   std::cout << "Total time = " << (double)sum / 1000000000 << " sec \n";
 }
 
 ///
@@ -101,7 +118,7 @@ void test_bench(const F& f) {
 ///
 void fib()
 {
-   result[g_index] = fibonacci<long>(500, computation::Algorithm_DP {});
+   result[g_index] = fibonacci<long>(500, computation::Algorithm_Egyptian {});
 }
 
 ///
@@ -133,9 +150,7 @@ void coarse_locking_fibonacci_test()
 {
    //task pools (using simple notification queue)
    std::cout << "Fibonacci + task system using coarse locking queue " << std::endl;
-   task_system_1Q_t  task_system_1Q;
-   task_system_NQ_t  task_system_NQ;
-   task_system_NQS_t task_system_NQS;
+   
    std::cout << "\nTask system 1Q " << std::endl;
    ++g_index;
    launcher_task_pool(task_system_1Q);
@@ -163,10 +178,6 @@ void fine_locking_fibonacci_test()
    result.data()[3] = 0;
    g_index = 1;
    
-   task_system_1Q_fine_t task_system_1Q_fine;
-   task_system_NQ_fine_t task_system_NQ_fine;
-   task_system_NQS_fine_t task_system_1Q_fine_t;
-   
    std::cout << "\nTask system 1Q " << std::endl;
    launcher_task_pool(task_system_1Q_fine);
    
@@ -174,10 +185,10 @@ void fine_locking_fibonacci_test()
    ++g_index;
    launcher_task_pool(task_system_NQ_fine);
    
-   std::cout << "\nTask system NQ work stealing " << std::endl;
+   std::cout << "\nTask system NQS work stealing " << std::endl;
    ++g_index;
-   task_system_1Q_fine_t.resize(10);
-   launcher_task_pool(task_system_1Q_fine_t);
+   task_system_NQS_fine.resize(10);
+   launcher_task_pool(task_system_NQS_fine);
    
    //verify that fibonacci is actually right
    assert(verify_equality(result));
@@ -194,10 +205,6 @@ void fine_locking_alloc_fibonacci_test()
    result.data()[3] = 0;
    g_index = 1;
    
-   task_system_1Q_fine_alloc_t task_system_1Q_fine;
-   task_system_NQ_fine_alloc_t task_system_NQ_fine;
-   task_system_NQS_fine_alloc_t task_system_1Q_fine_t;
-   
    std::cout << "\nTask system 1Q " << std::endl;
    launcher_task_pool(task_system_1Q_fine);
    
@@ -207,8 +214,8 @@ void fine_locking_alloc_fibonacci_test()
    
    std::cout << "\nTask system NQ work stealing " << std::endl;
    ++g_index;
-   task_system_1Q_fine_t.resize(10); //10 slots reserved per queue per thread
-   launcher_task_pool(task_system_1Q_fine_t);
+   task_system_NQS_fine_alloc.resize(10); //10 slots reserved per queue per thread
+   launcher_task_pool(task_system_NQS_fine_alloc);
    
    //verify that fibonacci is actually right
    assert(verify_equality(result));

@@ -155,15 +155,14 @@ namespace message_queue_system
       auto new_data = std::make_shared<T>(std::move(val));
       std::unique_ptr<node_t> p = std::make_unique<node_t>();
       {
-         //lock tail
-         lock_guard lk{ _tail_mutex };
+         lock_guard lk{_tail_mutex};
          //connect new node to the list
          _tail->_data = new_data;
          node_t* const new_tail = p.get();
          _tail->_next = std::move(p);
          _tail = new_tail;
       }
-      _cv.notify_all();
+      _cv.notify_one();
    }
 
    ///
@@ -182,14 +181,14 @@ namespace message_queue_system
 
          if (!tail_lock)
             return false;
-
+         
          //connect new node to the list
          _tail->_data = new_data;
          node_t* const new_tail = p.get();
          _tail->_next = std::move(p);
          _tail = new_tail;
       }
-      _cv.notify_all();
+      _cv.notify_one();
       return true;
    }
 

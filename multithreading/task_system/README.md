@@ -35,7 +35,7 @@ Single thread   | egyptian mul             |  500 |  418 ns |  0.041  sec
  NQ             | dynamic programming      |  500 |  4 us   |  0.35   sec
  NQ             | egyptian mul             |  500 |  1 us   |  ~0.17  sec
  NSQ            | dynamic programming      |  500 |  440 ns |  0.044   sec 
- NSQ            | 16us mul             |  500 |  3 us   |  ~0.31   sec 
+ NSQ            | egyptian mul             |  500 |  3 us   |  ~0.31   sec 
  
 
 
@@ -62,31 +62,55 @@ For simplicity the result on Windows are not reported here, but what I observed 
 
 Remarkable is the impact of using the fine locked queue that is implemented underneath like a single linked list. In order to avoid to allocate often to make room for new slots in the queue, I tried to run the same experiment on a slighly different fine grain locking queue that allowed me to reserve in advance a bunch of slots per each queue per thread. 
 
-Reusing these slots rather than allocate memory every time. The overall performance achieved using this queue is however neglectable for the task stealing system, but all the other task pools got twice as faster as they were before, even though they did not overcome the task stealing one.   
+Reusing these slots rather than allocate memory every time. The overall performance achieved using this queue is however neglectable for the task stealing system, but all the other task pools got a good boost, sometimes they were as twice as faster as they were before or more. 
+The intersting part is that accordingly with the threading schedulation the 1Q task system with grain locking outperformed by a factor 2 the task stealing one.
 Here the results that I got.
 
-#####OSX operating system 
+#####OSX operating system (fine grain locking) 
+
+| task system   | algorithm | N   |avg time per computation  | All computation (N*SPIN_FACTOR)|
+| --- |---| --- | ---       | --- |  ---   | ---  |  ---     |  ---    
+Single thread   | dynamic programming      |  500 |  ~19 us  |  ~1.9   sec   
+Single thread   | egyptian mul             |  500 |  595 ns  |  ~0.06 sec 
+1Q             | dynamic programming      |  500 |   ~5 us   |  ~0.54 sec
+1Q             | egyptian mul             |  500 |   ~5 us   |  ~0.45  sec  *    
+NQ             | dynamic programming      |  500 |    ~5 us  |   0.49  sec   
+NQ             | egyptian mul             |  500 |    ~2 us  |  ~0.25  sec
+NSQ            | dynamic programming      |  500 |    ~4 us  |  ~0.39  sec  
+NSQ            | egyptian mul             |  500 |    ~2 us   | ~0.25  sec 
+
+
+#####OSX operating system (fine grain locking + reserve slots)
 
 | task system   | algorithm | N   |avg time per computation  | All computation (N*SPIN_FACTOR)|
 | --- |---| --- | ---       | --- |  ---   | ---  |  ---     |  ---    
 Single thread   | dynamic programming      |  500 |  16 us   |  ~1.6   sec   
 Single thread   | egyptian mul             |  500 |  616 ns  |  ~0.062 sec 
-1Q             | dynamic programming      |  500 |   ~350 ns |  ~0.035 sec
-1Q             | egyptian mul             |  500 |   ~3.5 us |  ~0.35  sec    
-NQ             | dynamic programming      |  500 |    2 us   |   0.29  sec   
-NQ             | egyptian mul             |  500 |    2 us   |  ~0.22  sec
-NSQ            | dynamic programming      |  500 |    3 us   |  ~0.35  sec  
-NSQ            | egyptian mul             |  500 |  2.5 us   |  ~0.25  sec 
+1Q             | dynamic programming      |  500 |   ~903 ns |  ~0.01 sec  * 
+1Q             | egyptian mul             |  500 |   ~1 us   |  ~0.35  sec    
+NQ             | dynamic programming      |  500 |    ~3 us  |  ~0.37  sec   
+NQ             | egyptian mul             |  500 |    2 us   |  ~0.18  sec
+NSQ            | dynamic programming      |  500 |    ~4 us  |  ~0.4  sec  
+NSQ            | egyptian mul             |  500 |    ~5 us  |  ~0.5  sec 
+
+
+* stricly dependant of order of threading schedulation 
 
 
 Conclusion
 -------------
 
 On windows the situation is quite bizarre and the less efficient task pool looks to outperform that one that has the work stealing implementation.
+
 The egyptian multiplication algorithm to compute fibonacci looks to be the best algorithm to run on single thread that outperforms all the computation done using a task system (with and without task stealing).
-At the same time the dynamic programming fibonacci is better to run on a task system that follows the work stealing approach rather than to be run as single threaded application. Looking into the number DP algorithm is less efficient than the egyptian multiplication, but DP runs better than Egyptian multiplication one on multiple corea.Even still the egyptian multiplication outperforms the task system plus work stealing. 
+
+At the same time the dynamic programming fibonacci is better to run on a task system that follows the work stealing approach rather than to be run as single threaded application. DP algorithm is less efficient than the egyptian multiplication, but DP runs better than Egyptian multiplication on multiple core machines. Even still the egyptian multiplication outperforms the task system with or without work stealing. 
+
 Odd but in most of the cases it happened that the egyptian multiplication algorithm executed on Windows, runnning on a task system with work stealing, ran slower than using a task system without work stealing. 
-Essentially only for egyptian multiplication NQ outperformed NSQ and 1Q is the best pick.... this is true only on windows.
+
+On Windows essentially it is possible to say that for egyptian multiplication NQ task pool outperformed NSQ one. Weird but 1Q task pool is the best pick.
+
+On Mac things are quite different though, basic implementation of a task stealing thread pool revealed that it outperforms all the other task systems. But as soon I changed the stl std::queue with a crafted queue with fine locking implementation the performances of the task stealing system decreased and the other task systems caught up the task stealing one. This is most probably due to mine crafted queue that is not as efficient as the stl one.
 
 
 

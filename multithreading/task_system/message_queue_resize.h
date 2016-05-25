@@ -100,7 +100,7 @@ namespace message_queue_system
       std::unique_lock<std::mutex> head_lock(_head_mutex);
       
       _cv.wait(head_lock, [&]{
-         return (_done) || (_head.get() != get_tail());
+         return (_done.load()) || (_head.get() != get_tail());
       });
       
       if (_done)
