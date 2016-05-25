@@ -73,7 +73,7 @@ Here the results that I got.
 Single thread   | dynamic programming      |  500 |  ~19 us  |  ~1.9   sec   
 Single thread   | egyptian mul             |  500 |  595 ns  |  ~0.06 sec 
 1Q             | dynamic programming      |  500 |   ~5 us   |  ~0.54 sec
-1Q             | egyptian mul             |  500 |   ~5 us   |  ~0.45  sec  *    
+1Q             | egyptian mul             |  500 |   ~5 us   |  ~0.45  sec  1    
 NQ             | dynamic programming      |  500 |    ~5 us  |   0.49  sec   
 NQ             | egyptian mul             |  500 |    ~2 us  |  ~0.25  sec
 NSQ            | dynamic programming      |  500 |    ~4 us  |  ~0.39  sec  
@@ -86,15 +86,16 @@ NSQ            | egyptian mul             |  500 |    ~2 us   | ~0.25  sec
 | --- |---| --- | ---       | --- |  ---   | ---  |  ---     |  ---    
 Single thread   | dynamic programming      |  500 |  16 us   |  ~1.6   sec   
 Single thread   | egyptian mul             |  500 |  616 ns  |  ~0.062 sec 
-1Q             | dynamic programming      |  500 |   ~903 ns |  ~0.01 sec  * 
+1Q             | dynamic programming      |  500 |   ~903 ns |  ~0.01 sec  1 
 1Q             | egyptian mul             |  500 |   ~1 us   |  ~0.35  sec    
 NQ             | dynamic programming      |  500 |    ~3 us  |  ~0.37  sec   
 NQ             | egyptian mul             |  500 |    2 us   |  ~0.18  sec
-NSQ            | dynamic programming      |  500 |    ~4 us  |  ~0.4  sec  
-NSQ            | egyptian mul             |  500 |    ~5 us  |  ~0.5  sec 
+NSQ            | dynamic programming      |  500 |    ~4 us  |  ~0.4  sec  2
+NSQ            | egyptian mul             |  500 |    ~5 us  |  ~0.5  sec  2
 
 
-* stricly dependant of order of threading schedulation 
+* 1 stricly dependant of order of threading schedulation (not always reproducible)
+* 2 increased granurality of the lock in order to reduce number of allocations
 
 
 Conclusion
