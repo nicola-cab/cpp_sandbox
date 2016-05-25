@@ -50,10 +50,13 @@ NSQ             | egyptian mul            |  500  |  4 us  |  0.47 sec
 
 ####Using a crafted queue + fine grain locking
 -------------
-Rather then using a STL container I tried out with a crafted lock based queue (using as a base the one described in the book "concurrency in action" by  Anthony Williams) and I replace the queue in all the task systems implemented with this new one.
-The results that I got are slighly different that what I got before, the interesting part is that it looked like that using a fine grain locking approach helped more those task systems that were not using the task stealing approach.
-For simplicity the result on windows are not reported here, but what I observed is that, again on windows the overall computation resulted slower than on OSX and the fine grain locking had less impact on the task system implemented task stealing approach and made the other 2 task systems (without task stealing) closing the gap with the former. Sometimes the task stealing system that used fine locking resulted slower than the one using a simple STL container with coarse locking.
-Remarkable is the impact of the fine locked queue that is implemented underneath like a single linked list. For this reason I tried to run the same experiment also on a slighly different fine grain locking queue that allowed me to reserve in advance a bunch of slots per each queue per thread; reusing them rather then allocate memory every time. The overall performance achieved using this queue are however neglectable.   
+Rather then using a STL container I tried out with a crafted lock based queue, using as a base the one described in the book "concurrency in action" by  Anthony Williams. I replace the queue in all the task systems implemented with this new one.
+
+The results that I got are slighly different that what I got before, the interesting part is that the tests have showed off that using a fine grain locking approach helped more those task systems that were not using the task stealing approach.
+
+For simplicity the result on Windows are not reported here, but what I observed is that, again on windows the overall computation resulted slower than on OSX, moreover the fine grain locking queue had less impact on the task system implementing task stealing approach and made the other 2 task systems (without task stealing) closing the gap with the former. On both OSs but particularly on Windows, sometimes the task stealing system that was using the fine locking queue resulted slower than the one using a simple STL container with coarse locking.
+
+Remarkable is the impact of the fine locked queue that is implemented underneath like a single linked list. For this reason I tried to run the same experiment on a slighly different fine grain locking queue that allowed me to reserve in advance a bunch of slots per each queue per thread. Reusing them rather than allocate memory every time. The overall performance achieved using this queue are however neglectable.   
 Here the results that I got.
 
 #####OSX operating system 
