@@ -86,7 +86,7 @@ NSQ            | egyptian mul             |  500 |    ~2 us   | ~0.25  sec
 | --- |---| --- | ---       | --- |  ---   | ---  |  ---     |  ---    
 Single thread   | dynamic programming      |  500 |  16 us   |  ~1.6   sec   
 Single thread   | egyptian mul             |  500 |  616 ns  |  ~0.062 sec 
-1Q             | dynamic programming      |  500 |   ~903 ns |  ~0.01 sec      *1 
+1Q             | dynamic programming      |  500 |   ~903 ns |  ~0.1 sec      *1 
 1Q             | egyptian mul             |  500 |   ~1 us   |  ~0.35  sec    
 NQ             | dynamic programming      |  500 |    ~3 us  |  ~0.37  sec   
 NQ             | egyptian mul             |  500 |    2 us   |  ~0.18  sec
