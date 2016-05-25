@@ -22,40 +22,41 @@ Important to notice that both the algorithms were run with a spin factor of 1000
 
 #####OSX operating system 
 
-| task system   | algorithm | N |avg time per computation | All computation (N*SPIN_FACTOR)|
-| --- |---| ---| --- |  --- |  ---   | ---      
-Single thread   |    dynamic programming   |  500 |  15us  |  ~1.6   sec   
-Single thread   |    egyptian mul          |  500 | 418ns  |  0.041  sec 
- 1Q             |  dynamic programming     |  500 |  9us   |  0.95   sec
- 1Q             |  egyptian mul            |  500 |  16us  |  ~1.7   sec    
- NQ             |  dynamic programming     |  500 |  4us   |  0.35   sec
- NQ             | egyptian mul             |  500 |  1 us  |  ~0.17  sec
- NSQ            | dynamic programming      |  500 | 440 ns |  0.044   sec 
- NSQ            | egyptian mul             |  500 | 3us    |  ~0.31   sec 
+| task system   | algorithm | N   |avg time per computation | All computation (N*SPIN_FACTOR)|
+| --- |---| --- | ---       | --- |  ---   | ---  |  ---    |  ---    
+Single thread   | dynamic programming      |  500 |  15 us  |  ~1.6   sec   
+Single thread   | egyptian mul             |  500 |  418 ns |  0.041  sec 
+ 1Q             | dynamic programming      |  500 |  9 us   |  0.95   sec
+ 1Q             | egyptian mul             |  500 |  16 us  |  ~1.7   sec    
+ NQ             | dynamic programming      |  500 |  4 us   |  0.35   sec
+ NQ             | egyptian mul             |  500 |  1 us   |  ~0.17  sec
+ NSQ            | dynamic programming      |  500 |  440 ns |  0.044   sec 
+ NSQ            | egyptian mul             |  500 |  3 us   |  ~0.31   sec 
  
 
 
 #####Windows operating system 
 
-| task system   | algorithm | N |avg time per computation | All computation (N*SPIN_FACTOR)|
-| ---           |   ---    | ---|    ---                  | ---   
-Single thread   |    dynamic programming   |  500 |       |   
-Single thread   |    egyptian mul          |  500 |       |         
-1Q             |  dynamic programming     |  500 |        |  
-1Q             |  egyptian mul            |  500 |        |
-NQ             |  dynamic programming     |  500 |        |  
-NQ             | egyptian mul             |  500 |        | 
-NSQ            | dynamic programming      |  500 |        |     
-NSQ            | egyptian mul             |  500 |        |   
+| task system   | algorithm | N  |avg time per computation | All computation (N*SPIN_FACTOR)|
+| ---           |   ---     | ---|    --- |  ---  | ---    |  ---           
+Single thread   | dynamic programming     |  500  |  76 us |  7.6  sec   
+Single thread   | egyptian mul            |  500  |  5 us  |  0.54 sec        
+1Q              | dynamic programming     |  500  |  8 us  |  0.86 sec
+1Q              | egyptian mul            |  500  |  3 us  |  ~0.34 sec
+NQ              | dynamic programming     |  500  |  17 us |  1.7 sec  
+NQ              | egyptian mul            |  500  |  3 us  |  ~0.39 sec
+NSQ             | dynamic programming     |  500  |  10 us |  ~1 sec     
+NSQ             | egyptian mul            |  500  |  4 us  |  0.47 sec 
 
 
 Conclusion
 -------------
 
-On windows the situation is quite bizarre and the less effective task pool looks to outperform that one that has the work stealing implementation.
-The egyptian multiplication algorithm to compute fibonacci looks like the best algorithm to run on single thread that outperforms all the computation done using a task system (with and without task stealing).
-At the same time the dynamic programming fibonacci is better to run on a task system that is implementing the work stealing approach rather than as single threaded implementation, that it looks like dp solution is more adpated to be run on multicore machines than the egyptina multiplication.
-Even still the egyptian multiplication outperforms the task system plus work stealing. Odd but in most of the cases it happened that the egyptian multiplication run on a task system with work stealing run slower than the same algorithm run on a task system without work stealing, essentially only for egyptian multiplication NQ outperformed NSQ.
+On windows the situation is quite bizarre and the less efficient task pool looks to outperform that one that has the work stealing implementation.
+The egyptian multiplication algorithm to compute fibonacci looks to be the best algorithm to run on single thread that outperforms all the computation done using a task system (with and without task stealing).
+At the same time the dynamic programming fibonacci is better to run on a task system that follows the work stealing approach rather than to be run as single threaded application. Looking into the number DP algorithm is less efficient than the egyptian multiplication, but DP runs better than Egyptian multiplication one on multiple corea.Even still the egyptian multiplication outperforms the task system plus work stealing. 
+Odd but in most of the cases it happened that the egyptian multiplication algorithm executed on Windows, runnning on a task system with work stealing, ran slower than using a task system without work stealing. 
+Essentially only for egyptian multiplication NQ outperformed NSQ and 1Q is the best pick.... this is true only on windows.
 
 
 
