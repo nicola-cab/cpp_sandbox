@@ -31,7 +31,7 @@ Single thread   | egyptian mul             |  500 |  418 ns |  0.041  sec
  NQ             | dynamic programming      |  500 |  4 us   |  0.35   sec
  NQ             | egyptian mul             |  500 |  1 us   |  ~0.17  sec
  NSQ            | dynamic programming      |  500 |  440 ns |  0.044   sec 
- NSQ            | egyptian mul             |  500 |  3 us   |  ~0.31   sec 
+ NSQ            | 16us mul             |  500 |  3 us   |  ~0.31   sec 
  
 
 
@@ -47,6 +47,27 @@ NQ              | dynamic programming     |  500  |  17 us |  1.7 sec
 NQ              | egyptian mul            |  500  |  3 us  |  ~0.39 sec
 NSQ             | dynamic programming     |  500  |  10 us |  ~1 sec     
 NSQ             | egyptian mul            |  500  |  4 us  |  0.47 sec 
+
+####Using a crafted queue + fine grain locking
+-------------
+Rather then using a STL container I tried out with a crafted lock based queue (using as a base the one described in the book "concurrency in action" by  Anthony Williams) and I replace the queue in all the task systems implemented with this new one.
+The results that I got are slighly different that what I got before, the interesting part is that it looked like that using a fine grain locking approach helped more those task systems that were not using the task stealing approach.
+For simplicity the result on windows are not reported here, but what I observed is that, again on windows the overall computation resulted slower than on OSX and the fine grain locking had less impact on the task system implemented task stealing approach and made the other 2 task systems (without task stealing) closing the gap with the former. Sometimes the task stealing system that used fine locking resulted slower than the one using a simple STL container with coarse locking.
+Remarkable is the impact of the fine locked queue that is implemented underneath like a single linked list. For this reason I tried to run the same experiment also on a slighly different fine grain locking queue that allowed me to reserve in advance a bunch of slots per each queue per thread; reusing them rather then allocate memory every time. The overall performance achieved using this queue are however neglectable.   
+Here the results that I got.
+
+#####OSX operating system 
+
+| task system   | algorithm | N   |avg time per computation  | All computation (N*SPIN_FACTOR)|
+| --- |---| --- | ---       | --- |  ---   | ---  |  ---     |  ---    
+Single thread   | dynamic programming      |  500 |  16 us   |  ~1.6   sec   
+Single thread   | egyptian mul             |  500 |  616 ns  |  ~0.062 sec 
+1Q             | dynamic programming      |  500 |   ~350 ns |  ~0.035 sec
+1Q             | egyptian mul             |  500 |   ~3.5 us |  ~0.35  sec    
+NQ             | dynamic programming      |  500 |    2 us   |   0.29  sec   
+NQ             | egyptian mul             |  500 |    2 us   |  ~0.22  sec
+NSQ            | dynamic programming      |  500 |    3 us   |  ~0.35  sec  
+NSQ            | egyptian mul             |  500 |  2.5 us   |  ~0.25  sec 
 
 
 Conclusion
