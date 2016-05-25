@@ -3,19 +3,23 @@ Desing Task System
 
 All this code has been partially copied and inspired by the talk given by Sean Parent on concurrency.
 
-All this code is about implementing of a simple task system + task stealing. The task system has been implementend gradually, following 3 different increment approaches. 
+All this code is about implementing of a simple task system + task stealing. The task system has been implementend gradually, following 3 different incremental approaches. 
 These are 3 different implementations:
 * only queue 1 producer and multiple consumers (1Q)
 * one queue per thread 1 producer and multiple consumers (NQ)
 * one queue per thread 1 producer and multiple consumers plus task stealing (NQS)
 
-The queue used is not optimized. it is just a simple FIFO implementation using a std::deque.
+In first instance the queue used is not optimized. it is just a simple FIFO implementation using a std::deque.
 All the operations that attempt to push/pop from the queue are atomic and protected using a 
 lock.
 The locking technique adopted has a corse granularity. There are no opmitimization on the queue.
 
-Further steps will entitle optimizations applied to the queue in order to try to lock as less as possible.
+Further steps entitled adding optimizations changing the underneath queue used in order to try to lock as less as possible.
 Final goal is to replace the current queue with a lock free one in order to meausere the actual gain of using lock free algorithms
+
+All the test are conducted on 2 different machines:
+* MacBook Air (core I5 + 8GB ram)
+* Windows7 (core i7 + 16GB ram)
 
 Fibonacci has been implemented using two different algorithm. The first one using DP, the second one copy the one presented in the book "From Mathematics to Generic Programming" that uses Egyptian Multiplication (honestly I have no idea on how it accomplishes fibonacci). 
 Important to notice that both the algorithms were run with a spin factor of 100000 in order to have a well gauced result
@@ -56,7 +60,9 @@ The results that I got are slighly different that what I got before, the interes
 
 For simplicity the result on Windows are not reported here, but what I observed is that, again on windows the overall computation resulted slower than on OSX, moreover the fine grain locking queue had less impact on the task system implementing task stealing approach and made the other 2 task systems (without task stealing) closing the gap with the former. On both OSs but particularly on Windows, sometimes the task stealing system that was using the fine locking queue resulted slower than the one using a simple STL container with coarse locking.
 
-Remarkable is the impact of the fine locked queue that is implemented underneath like a single linked list. For this reason I tried to run the same experiment on a slighly different fine grain locking queue that allowed me to reserve in advance a bunch of slots per each queue per thread. Reusing them rather than allocate memory every time. The overall performance achieved using this queue are however neglectable.   
+Remarkable is the impact of using the fine locked queue that is implemented underneath like a single linked list. In order to avoid to allocate often to make room for new slots in the queue, I tried to run the same experiment on a slighly different fine grain locking queue that allowed me to reserve in advance a bunch of slots per each queue per thread. 
+
+Reusing these slots rather than allocate memory every time. The overall performance achieved using this queue is however neglectable for the task stealing system, but all the other task pools got twice as faster as they were before, even though they did not overcome the task stealing one.   
 Here the results that I got.
 
 #####OSX operating system 

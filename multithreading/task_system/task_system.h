@@ -22,7 +22,8 @@ namespace task_system
          while (true)
          {
             std::function<void()> f;
-            if (!_q.pop(f))  break;
+            if (!_q.pop(f))
+               break;
             f();
          }
       }
@@ -40,7 +41,8 @@ namespace task_system
       ~task_system_t()
       {
          _q.done();
-         for (auto& e : _threads) e.join();
+         for (auto& e : _threads)
+            e.join();
       }
       
       template<typename F>
