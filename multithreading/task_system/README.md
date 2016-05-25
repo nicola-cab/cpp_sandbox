@@ -91,7 +91,7 @@ Single thread   | egyptian mul             |  500 |  616 ns  |  ~0.062 sec
 NQ             | dynamic programming      |  500 |    ~3 us  |  ~0.37  sec   
 NQ             | egyptian mul             |  500 |    2 us   |  ~0.18  sec
 NSQ            | dynamic programming      |  500 |    ~4 us  |  ~0.4  sec      *2
-NSQ            | egyptian mul             |  500 |    ~5 us  |  ~0.5  sec      *2
+NSQ            | egyptian mul             |  500 |    ~3 us  |  ~0.32 sec      *2
 
 
 * 1 stricly dependant of order of threading schedulation (not always reproducible)
@@ -105,13 +105,17 @@ On windows the situation is quite bizarre and the less efficient task pool looks
 
 The egyptian multiplication algorithm to compute fibonacci looks to be the best algorithm to run on single thread that outperforms all the computation done using a task system (with and without task stealing).
 
-At the same time the dynamic programming fibonacci is better to run on a task system that follows the work stealing approach rather than to be run as single threaded application. DP algorithm is less efficient than the egyptian multiplication, but DP runs better than Egyptian multiplication on multiple core machines. Even still the egyptian multiplication outperforms the task system with or without work stealing. 
+DP algorithm is less efficient than the egyptian multiplication, but DP runs better than Egyptian multiplication on multicore machines. Even still the egyptian multiplication outperforms the DP one that runs on top of any task system implemented.
 
-Odd but in most of the cases it happened that the egyptian multiplication algorithm executed on Windows, runnning on a task system with work stealing, ran slower than using a task system without work stealing. 
+The bests result gotten are:
+* Single thread, fib(500) computed 100000 times, total time 0.041 (Egyptian multiplication)
+* Task stealing, fib(500) computed 100000 ties, total time 0.044  (Dynamic programming)
 
-On Windows essentially it is possible to say that for egyptian multiplication NQ task pool outperformed NSQ one. Weird but 1Q task pool is the best pick.
+Important to notice that Dynamic programming algorithm run on a single thread application is roughly 25 times slower than Egyption multiplication one. This means that the task stealing approach brought an algorithm that was quite slow to be computed in more or less the same time of a very efficient algorithm, just exploiting the power of a multicore cpu (this is valid on OSX only though).
 
-On Mac things are quite different though, basic implementation of a task stealing thread pool revealed that it outperforms all the other task systems. But as soon I changed the stl std::queue with a crafted queue with fine locking implementation the performances of the task stealing system decreased and the other task systems caught up the task stealing one. This is most probably due to mine crafted queue that is not as efficient as the stl one.
+On Windows essentially it is possible to say that for egyptian multiplication NQ task pool outperformed NSQ one. Weird but 1Q task system outperforms the other 2 task systems and then it could be considered is the best pick.
+
+On Mac things are quite different though, basic implementation of a task stealing thread pool revealed that it outperforms all the other task systems. But as soon I changed the stl std::queue with a crafted queue with fine locking implementation the performances of the task stealing system decreased and the other task systems caught up the task stealing one. This is most probably due to mine crafted queue that is not as efficient as the stl one and how much is the crafted queue cache friendly compared to the stl one.
 
 
 
