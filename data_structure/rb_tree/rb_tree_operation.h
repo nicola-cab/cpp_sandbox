@@ -180,8 +180,25 @@ namespace rb_tree {
    /// @return: number of keys less than x
    ///
    template <typename T>
-   inline int rank(Node<T>* node, const T& x)
+   inline unsigned rank(Node<T>* node, const T& x)
    {
-      return 0;
+      unsigned rank = 0;
+      while( node )
+      {
+         if( x < node->left_ )
+         {
+            node = node->left_;
+         }
+         else if( x > node->right_)
+         {
+            rank = 1 + rb_tree_node::size(node->left_);
+            node = node->right_;
+         }
+         else
+         {
+            return rank + rb_tree_node::size(node->left_);
+         }
+      }
+      return rank;
    }
 }
