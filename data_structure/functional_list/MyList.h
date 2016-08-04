@@ -1,6 +1,5 @@
 //
 //  MyList.h
-//  amazon_test_list
 //
 //  Created by Nicola Cabiddu on 04/06/2016.
 //  Copyright © 2016 Nicola Cabiddu. All rights reserved.
