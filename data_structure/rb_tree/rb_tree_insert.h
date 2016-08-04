@@ -149,8 +149,7 @@ namespace rb_tree {
       }
 
       rb_tree_insert_fix_up(node, z);
-      
-      rb_tree_node::compute_counter(z);
+      rb_tree_node::compute_counter_bottom_up(z);
       
       return true;
    }

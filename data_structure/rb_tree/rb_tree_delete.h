@@ -128,7 +128,6 @@ namespace rb_tree {
       Color original_color = n->color_;
       Node x = nullptr;
 
-
       if (n == nullptr)
          return n; //error key not found
 
@@ -157,7 +156,7 @@ namespace rb_tree {
          //extension for RB tree
          original_color = y->color_;
          x = y->right_;
-
+        
          if (y->parent_ == n)
          {
             if (x != nullptr )
@@ -175,10 +174,6 @@ namespace rb_tree {
          y->left_->parent_ = y;
          //extension for RB tree
          y->color_ = n->color_;
-         
-        // x = y->left_;
-         //x = y->left_;
-         
       }
 
       //fix up for delete
@@ -187,8 +182,8 @@ namespace rb_tree {
          rb_tree_delete_fix_up(root, x);
       }
       
-      rb_tree_node::compute_counter(x);
-      
+      rb_tree_node::compute_counter_top_down(root);
+   
       return n;
    }
 };

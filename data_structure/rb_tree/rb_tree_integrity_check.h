@@ -80,7 +80,7 @@ namespace rb_tree_integrity
       /// @brief: check whether every path from the root to the a leaf
       ///         has the same number of black links
       ///
-      bool is_tree_balanced(const Node root, int blacks);
+      bool is_tree_balanced(const Node root, const Node parent, const Node node, int blacks);
       
       ///
       /// @brief: private implemementation to check if the count field is consistent
@@ -125,12 +125,12 @@ namespace rb_tree_integrity
       Node x = set.root_;
       while (x != nullptr)
       {
-         if (!is_red(x))
+         if (!is_red(x) ) //&& x!=set.root_)
             black++;
          
          x = x->left_;
       }
-      return is_tree_balanced(set.root_, black);
+      return is_tree_balanced(set.root_, set.root_, set.root_, black);
    }
 
    template<typename T>
@@ -175,11 +175,19 @@ namespace rb_tree_integrity
    }
    
    template<typename T>
-   bool check_tree<T>::is_tree_balanced(const Node node, int blacks)
+   bool check_tree<T>::is_tree_balanced(const Node root, const Node parent, const Node node, int blacks)
    {
-      if( node == nullptr ) return (blacks == 0);
+      if( node == nullptr )
+      {
+         //I am actually tracking down the links (not the nodes)
+         if(root == parent && blacks > 0)
+            --blacks;
+         return (blacks == 0);
+      }
+      
       if( !is_red(node)) --blacks;
-      return is_tree_balanced(node->left_, blacks) && is_tree_balanced(node->right_, blacks);
+      
+      return is_tree_balanced(root, node, node->left_, blacks) && is_tree_balanced(root, node, node->right_, blacks);
    }
    
    template<typename T>

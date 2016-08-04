@@ -141,9 +141,9 @@ T test_insert(std::set<T>& stl_set, tree::set<T>& tree_set)
    std::vector<T> v;
    T ret;
    
-   //random_vector(v, ret);
+   random_vector(v, ret);
    //asceding_vector(v, ret);
-   desceding_vector(v, ret);
+   //desceding_vector(v, ret);
    
    //simple vector
    //std::vector<T> v2 {6,5,3,2,1};

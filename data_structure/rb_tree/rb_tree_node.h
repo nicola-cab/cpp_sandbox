@@ -102,7 +102,7 @@ namespace rb_tree_node
    ///                in order to restore the right counter
    ///
    template<typename T>
-   void compute_counter(const Node<T>* node)
+   void compute_counter_bottom_up(const Node<T>* node)
    {
       while( node && node->parent_ )
       {
@@ -111,5 +111,15 @@ namespace rb_tree_node
       }
    }
    
-   
+   template<typename T>
+   void compute_counter_top_down(Node<T>* node)
+   {
+      if( node == nullptr )
+         return;
+      
+      compute_counter_top_down(node->left_);
+      compute_counter_top_down(node->right_);
+      node->count_ = 1 + size(node->left_) + size(node->right_) ;
+
+   }
 };
