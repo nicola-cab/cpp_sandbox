@@ -130,7 +130,7 @@ namespace rb_tree {
       if (n == nullptr)
          return n; //error key not found
       
-      Color original_color = n->color_;
+      auto original_color = n->color_;
 
       // 3 possible cases can raise here.
       //    A: Delete a leaf (no children)

@@ -80,7 +80,7 @@ void insert_set(Set &set, const std::vector<T>& v)
    auto start = Clock::now();
    
    for (const auto& value : v) {
-      std::cout << "Inserting v = " << value << std::endl;
+      //std::cout << "Inserting v = " << value << std::endl;
       set.insert(value);
    }
    
