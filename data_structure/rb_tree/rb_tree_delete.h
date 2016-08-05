@@ -125,11 +125,12 @@ namespace rb_tree {
       // variable to keep track of original color for node to delete
       // support variables x and y
 
-      Color original_color = n->color_;
       Node x = nullptr;
 
       if (n == nullptr)
          return n; //error key not found
+      
+      Color original_color = n->color_;
 
       // 3 possible cases can raise here.
       //    A: Delete a leaf (no children)

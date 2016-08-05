@@ -26,9 +26,9 @@ namespace rb_tree {
       Node parent = nullptr;
       Node grand_parent = nullptr;
 
-      while ((node != root) &&
-         (node->color_ != Color::black) &&
-         (node->parent_->color_ == Color::red))
+      while (node != root &&
+             node->color_ != Color::black &&
+             node->parent_->color_ == Color::red)
       {
          parent = node->parent_;
          grand_parent = get_grand_parent(node);
@@ -37,7 +37,7 @@ namespace rb_tree {
          //    Parent is left child
          if (parent == grand_parent->left_)
          {
-            Node uncle = get_uncle(node);
+            Node uncle = grand_parent->right_;
 
             // case 1: 
             //    Uncle is red --> recoloring
@@ -48,22 +48,25 @@ namespace rb_tree {
                uncle->color_ = Color::black;
                node = grand_parent;
             }
-            else {
+            else
+            {
                //case 2: 
-               //   node is right child.. needed left rotation
+               // node is right child.. needed left rotation
                if (node == parent->right_)
                {
-                  node = parent;
-                  node->count_ = 1; //reset number of nodes rooted
                   rotate_left(root, parent);
+                  node = parent;
+                  parent = node->parent_;
+                  node->count_ = 1;
                }
 
                //case 3:
                // node is left child... needed right rotate
-               parent->color_ = Color::black;
-               grand_parent->color_ = Color::red;
-               grand_parent->count_ = 1; //reset number of nodes rooted
+               // parent->color_ = Color::black;
+               grand_parent->count_ = 1;
                rotate_right(root, grand_parent);
+               std::swap(parent->color_,grand_parent->color_);
+               node = parent;
             }
 
          }
@@ -71,7 +74,7 @@ namespace rb_tree {
          //    Parent is right child    
          else
          {
-            Node uncle = get_uncle(node);
+            Node uncle = grand_parent->left_;
 
             //case 1:
             //    Uncle is red
@@ -88,17 +91,18 @@ namespace rb_tree {
                //   node is left child
                if (node == parent->left_)
                {
-                  node = parent;
-                  node->count_ = 1; //reset number of nodes rooted
                   rotate_right(root, parent);
+                  node = parent;
+                  parent = node->parent_;
+                  node->count_ = 1;
                }
 
                //case 3:
                //    node is right child
-               parent->color_ = Color::black;
-               grand_parent->color_ = Color::red;
-               grand_parent->count_ = 1; //reset number of nodes rooted
+               grand_parent->count_ = 1;
                rotate_left(root, grand_parent);
+               std::swap(parent->color_,grand_parent->color_);
+               node = parent;
             }
          }
       }
@@ -149,7 +153,7 @@ namespace rb_tree {
       }
 
       rb_tree_insert_fix_up(node, z);
-      rb_tree_node::compute_counter_bottom_up(z);
+      rb_tree_node::compute_counter_top_down(node);
       
       return true;
    }

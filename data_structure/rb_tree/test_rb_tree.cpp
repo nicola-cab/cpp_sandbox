@@ -18,6 +18,8 @@ int main(int argc, char* argv[])
    test_erase(key, stl_set, tree_set);
    test_equality_tree(stl_set, tree_set);
    
+   std::cout << stl_set.size() << std::endl;
+   
    //test correctness of the rb_tree
    test_integrity_check(tree_set);
 
